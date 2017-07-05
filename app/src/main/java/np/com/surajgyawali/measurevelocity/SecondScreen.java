@@ -7,14 +7,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 
 public class SecondScreen extends AppCompatActivity {
@@ -40,8 +37,6 @@ public class SecondScreen extends AppCompatActivity {
         Typeface HighScore = Typeface.createFromAsset(getAssets(),"fonts/digital-7.ttf");
         TextView HighScoreView = (TextView) findViewById(R.id.High_Score);
         HighScoreView.setTypeface(HighScore);
-
-
         //code for play button
 
         playButton = (ImageButton) findViewById(R.id.playButton);
@@ -50,7 +45,12 @@ public class SecondScreen extends AppCompatActivity {
 
             @Override
             public void onClick(View arg0) {
+                //code to increase button on click by 10%
+                final Animation myAnim = AnimationUtils.loadAnimation(SecondScreen.this,R.anim.button_anim);
+                playButton.startAnimation(myAnim);
+                //launch new activity
             startActivity(new Intent(SecondScreen.this,FinalScreen.class));
+
             }
 
         });
@@ -59,7 +59,10 @@ public class SecondScreen extends AppCompatActivity {
         shareButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public  void onClick(View arg0){
+                final Animation myAnim = AnimationUtils.loadAnimation(SecondScreen.this,R.anim.button_anim);
+                shareButton.startAnimation(myAnim);
                 //write Code for share button
+
 
             }
 
@@ -68,6 +71,8 @@ public class SecondScreen extends AppCompatActivity {
                 leaderBoardButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        final Animation myAnim = AnimationUtils.loadAnimation(SecondScreen.this,R.anim.button_anim);
+                        leaderBoardButton.startAnimation(myAnim);
                         //Write Code for leader board
                     }
                 });
@@ -76,11 +81,18 @@ public class SecondScreen extends AppCompatActivity {
         rateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                final Animation myAnim = AnimationUtils.loadAnimation(SecondScreen.this,R.anim.button_anim);
+                rateButton.startAnimation(myAnim);
                 //Write Code for rate button
 
             }
         });
-//code for score background
+
+//        public void enlarge(View view) {
+//            ImageButton button = (ImageButton)findViewById(R.id.button);
+//            final Animation myAnim = AnimationUtils.loadAnimation(this, R.anim.button_anim);
+//            button.startAnimation(myAnim);
+//        }
 
 //code for banner ad
         AdView mAdView = (AdView) findViewById(R.id.adView);
