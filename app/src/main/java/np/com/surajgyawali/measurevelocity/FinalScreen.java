@@ -1,6 +1,7 @@
 package np.com.surajgyawali.measurevelocity;
 import android.graphics.Typeface;
 import android.graphics.drawable.AnimationDrawable;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,8 +17,7 @@ import com.google.android.gms.ads.AdView;
  * status bar and navigation/system bar) with user interaction.
  */
 public class FinalScreen extends AppCompatActivity {
-    @Override
-    public void onBackPressed() { }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,21 +43,22 @@ public class FinalScreen extends AppCompatActivity {
 
         //code for audio while counting 1,2,3
         final MediaPlayer CountSound=MediaPlayer.create(this,R.raw.time);
+        setVolumeControlStream(AudioManager.STREAM_MUSIC);
         //to play sound for 3 sec since sound is of 4s ;4s-1s=3s
-        CountSound.seekTo(1000);
+        //CountSound.seekTo(1000);
         CountSound.start();
         CountSound.setLooping(false);
-        CountSound.setVolume(100,100);
-
         CountSound.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             public void onCompletion(MediaPlayer mp) {
 
-                CountSound.reset();
+                CountSound.stop();
                 CountSound.release();
+                anim.stop();
                 //to go back to previous activity in 3 secs
                finish();
             }
         });
+
 
 
             //
@@ -74,6 +75,11 @@ public class FinalScreen extends AppCompatActivity {
         AdView mAdView = (AdView) findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
+    }
+
+    @Override
+    public void onBackPressed() {
+        //to go back to previous activity i
     }
 
 
