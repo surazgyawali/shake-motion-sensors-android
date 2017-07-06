@@ -3,6 +3,7 @@ import android.graphics.Typeface;
 import android.graphics.drawable.AnimationDrawable;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Window;
@@ -42,36 +43,25 @@ public class FinalScreen extends AppCompatActivity {
         anim.setOneShot(true);
 
         //code for audio while counting 1,2,3
-        final MediaPlayer CountSound=MediaPlayer.create(this,R.raw.time);
+        final  MediaPlayer CountSound=MediaPlayer.create(this,R.raw.time);
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
         //to play sound for 3 sec since sound is of 4s ;4s-1s=3s
-        //CountSound.seekTo(1000);
+       // CountSound.seekTo(1000);
         CountSound.start();
         CountSound.setLooping(false);
-        CountSound.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            public void onCompletion(MediaPlayer mp) {
-
+        //code to end all activities in 3 secs
+        Handler handler=new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
                 CountSound.stop();
                 CountSound.release();
                 anim.stop();
-                //to go back to previous activity in 3 secs
-               finish();
+                finish();
             }
-        });
-
-
-
-            //
-        //code to return back to second screen in 3 secs
-
-//        new Handler().postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                finish();
-//            }
-//        }, 3000);
-
+        }, 3000);
         //code for banner ad
+
         AdView mAdView = (AdView) findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
@@ -79,6 +69,9 @@ public class FinalScreen extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        //todisable back button
+        //onStop();
+        //this.finish();
         //to go back to previous activity i
     }
 
