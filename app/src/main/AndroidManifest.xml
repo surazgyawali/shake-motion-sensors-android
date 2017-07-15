@@ -28,7 +28,7 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-        <meta-data android:name="com.google.android.gms.appstate.APP_ID" android:value="@string/app_id" />
+        <meta-data android:name="com.google.android.gms.games.APP_ID" android:value="@string/app_id" />
 
 
         <!-- Include the AdActivity configChanges and theme. -->
@@ -39,7 +39,6 @@
         <activity
             android:name=".SecondScreen"
             android:theme="@style/SecondTheme"
-            android:noHistory="true"
             android:screenOrientation="sensorPortrait"/>
         <activity
             android:name=".FinalScreen"

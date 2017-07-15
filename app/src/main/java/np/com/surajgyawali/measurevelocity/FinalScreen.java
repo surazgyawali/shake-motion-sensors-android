@@ -24,7 +24,7 @@ public class FinalScreen extends AppCompatActivity {
     Handler TimeSoundHandler= new Handler();
     private Timer timer;
     private int i=0;
-    final private int thersholdscore=0;
+    final private int thersholdscore=600;
     Runnable endSound = null;
     MediaPlayer TimeSound=new MediaPlayer();
     MediaPlayer StopSound=new MediaPlayer();
@@ -70,10 +70,6 @@ public class FinalScreen extends AppCompatActivity {
 
             editor.putInt("HIGH_SCORE",score);
         }
-        else{
-
-
-        }
 
         //code for frame animation
         ImageView imageView =(ImageView) findViewById(R.id.count_animation);
@@ -113,6 +109,7 @@ public class FinalScreen extends AppCompatActivity {
                             CountSound.reset();
                         }
                         TimeSoundHandler.removeCallbacks(endSound);
+                        startActivity(new Intent(FinalScreen.this, SecondScreen.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
                         finish();
                     }
 
@@ -156,7 +153,7 @@ public class FinalScreen extends AppCompatActivity {
                                     if(CountSound.isPlaying()){
                                     CountSound.stop();
                                     CountSound.reset();}
-                                    startActivity(new Intent(FinalScreen.this, SecondScreen.class));
+                                    startActivity(new Intent(FinalScreen.this, SecondScreen.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
                                     finish();
 
                                 }
@@ -193,7 +190,7 @@ public class FinalScreen extends AppCompatActivity {
             StopSound.reset();
         }
         TimeSoundHandler.removeCallbacks(endSound);
-        startActivity(new Intent(FinalScreen.this, SecondScreen.class));
+        startActivity(new Intent(FinalScreen.this, SecondScreen.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
         finish();
     }
 

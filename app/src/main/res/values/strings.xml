@@ -11,10 +11,6 @@
         For more information, see https://support.google.com/admob/answer/3052638
     <!- -->
     <string name="interstitial_ad_unit_id">ca-app-pub-3940256099942544/1033173712</string>
-    <string name="app_id">103317371252</string>
-
     <string name="title_activity_game__screen">Game_Screen</string>
-    <string name="leaderboard_id">CgkI_97ls5wCEAITRY</string>
-    <string name="signin_failure">Unable to sign in to Google Play Services,Please check you internet connection.</string>
-    <string name="signin_other_error">Unable to sign in to Google Play Services,Please check you internet connection.</string>
+
 </resources>

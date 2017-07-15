@@ -63,6 +63,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     }
     @Override
     public void onSensorChanged(SensorEvent event) {
+
         TextView tvX= (TextView)findViewById(R.id.x_axis);
         TextView tvY= (TextView)findViewById(R.id.y_axis);
         TextView tvZ= (TextView)findViewById(R.id.z_axis);
