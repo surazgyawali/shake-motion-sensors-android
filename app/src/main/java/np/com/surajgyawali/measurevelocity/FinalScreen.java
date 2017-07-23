@@ -4,6 +4,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.graphics.drawable.AnimationDrawable;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.media.MediaPlayer;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -16,24 +20,48 @@ import android.widget.TextView;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
-import java.util.Random;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class FinalScreen extends AppCompatActivity {
+
+public class FinalScreen extends AppCompatActivity implements SensorEventListener {
     Handler TimeSoundHandler= new Handler();
     private Timer timer;
     private int i=0;
-    final private int thersholdscore=600;
+
+    final private int threshold_score =150;
+
     Runnable endSound = null;
     MediaPlayer TimeSound=new MediaPlayer();
     MediaPlayer StopSound=new MediaPlayer();
     MediaPlayer CountSound=new MediaPlayer();
+    MediaPlayer Crowd1= new MediaPlayer();
+    MediaPlayer Crowd2= new MediaPlayer();
+    MediaPlayer Crowd3= new MediaPlayer();
+    MediaPlayer Crowd4= new MediaPlayer();
+
+
+
+
+
     AnimationDrawable anim=new AnimationDrawable();
-    SharedPreferences gamedata;
+    SharedPreferences game_data;
 
     int score=0;
-    int highscore=0;
+    int high_score =0;
+
+    private float mLastX, mLastY, mLastZ;
+    private boolean mInitialized;
+    private SensorManager mSensorManager;
+
+    final SensorEventListener listener = this;
+    double instant_acceleration=0;
+    double resultantAcceleration=0;
+    ArrayList<Double> accelerationList = new ArrayList<>();
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,157 +70,270 @@ public class FinalScreen extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.final_screen_layout);
 
-        gamedata = getSharedPreferences("GAME_DATA", Context.MODE_PRIVATE);
-        final SharedPreferences.Editor editor= gamedata.edit();
+        Sensor mAccelerometer;
+        mInitialized = false;
+        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
 
-        highscore = gamedata.getInt("HIGH_SCORE",0);
-        score=gamedata.getInt("CURRENT_SCORE",0);
+        Typeface typeface = Typeface.createFromAsset(getAssets(),"fonts/digital-7.ttf");
 
-        Typeface CurrentScore = Typeface.createFromAsset(getAssets(),"fonts/digital-7.ttf");
+        final Intent SecondScreen= new Intent(FinalScreen.this, SecondScreen.class);
+        SecondScreen.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
         final TextView ScoreView = (TextView) findViewById(R.id.Current_Score);
-        ScoreView.setTypeface(CurrentScore);
-        ScoreView.setText(Integer.toString(score));
-
-
-        Typeface HighScore = Typeface.createFromAsset(getAssets(), "fonts/digital-7.ttf");
         final TextView HighScoreView = (TextView) findViewById(R.id.High_Score);
-        HighScoreView.setTypeface(HighScore);
-        HighScoreView.setText(Integer.toString(highscore));
-
-        Random r = new Random();
-        score = r.nextInt(999) + 1;
-        if(score>thersholdscore){
-        editor.putInt("CURRENT_SCORE",score);
-        }
-
-
-        if (score>highscore){
-
-            editor.putInt("HIGH_SCORE",score);
-        }
-
-        //code for frame animation
         ImageView imageView =(ImageView) findViewById(R.id.count_animation);
+
+        StopSound = MediaPlayer.create(this,R.raw.stop);
+        TimeSound = MediaPlayer.create(this,R.raw.time);
+        CountSound = MediaPlayer.create(this,R.raw.count);
+        Crowd1 = MediaPlayer.create(this,R.raw.crowd1);
+        Crowd2 = MediaPlayer.create(this,R.raw.crowd2);
+        Crowd3 = MediaPlayer.create(this,R.raw.crowd3);
+        Crowd4 = MediaPlayer.create(this,R.raw.crowd4);
+
         imageView.setBackgroundResource(R.drawable.count_movi);
         anim = (AnimationDrawable) imageView.getBackground();
+        ScoreView.setTypeface(typeface);
+        HighScoreView.setTypeface(typeface);
+
+
+        game_data = getSharedPreferences("GAME_DATA", Context.MODE_PRIVATE);
+        //final SharedPreferences.Editor editor= game_data.edit();
+
+        high_score = game_data.getInt("HIGH_SCORE",0);
+        score= game_data.getInt("CURRENT_SCORE",0);
+
+        ScoreView.setText(Integer.toString(score));
+
+        HighScoreView.setText(Integer.toString(high_score));
+
         anim.start();
         anim.setOneShot(true);
         //code for audio while counting 1,2,3
 
-        //TimeSound=MediaPlayer.create(this, getResources().getIdentifier("time","raw",getPackageName()))
-        StopSound = MediaPlayer.create(this,R.raw.stop);
-        TimeSound = MediaPlayer.create(this,R.raw.time);
-        CountSound = MediaPlayer.create(this,R.raw.count);
+
         TimeSound.start();
         TimeSound.setLooping(false);
 
-        //code to update or count score
-
-
-
-        //code to end all activities in 3 secs
-            TimeSoundHandler.postDelayed(endSound = new Runnable() {
+        TimeSoundHandler.postDelayed(endSound = new Runnable() {
                 @Override
                 public void run() {
-                    CountSound.start();
-                    CountSound.setLooping(false);
-                    if(score<thersholdscore) {
+                    mSensorManager.unregisterListener(listener);
+                    if(score< threshold_score) {
                         if (TimeSound.isPlaying()) {
                             TimeSound.stop();
-                            TimeSound.reset();
                         }
+                        TimeSound.reset();
+
                         if (anim.isRunning()) {
                             anim.stop();
                         }
                         if (CountSound.isPlaying()) {
                             CountSound.stop();
-                            CountSound.reset();
                         }
+                        startActivity(SecondScreen);
+                        CountSound.reset();
+                        Crowd1.start();
+                        stopReaction(Crowd1);
                         TimeSoundHandler.removeCallbacks(endSound);
-                        startActivity(new Intent(FinalScreen.this, SecondScreen.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
-                        finish();
-                    }
-
-                    else {
-                        //when the velocity is noticeable
-                        if (TimeSound.isPlaying()) {
-                            TimeSound.stop();
-                            TimeSound.reset();
-                        }
-                        if (anim.isRunning()) {
-                            anim.selectDrawable(4);
-                            anim.stop();
-                        }
-
-
-                        CountSound.start();
-                        CountSound.setLooping(false);
-                        final long period =2;
-                        timer=new Timer();
-                        timer.schedule(new TimerTask() {
-                            @Override
-                            public void run() {
-                                //this repeats for every value of period variable in ms i.e changes the speed of progress
-                                if (i<score){
-                                    runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            ScoreView.setText(Integer.toString(i));
-                                        }
-
-                                    });
-                                    i++;
-
-
-                                }else{
-                                    //closing the timer
-                                    editor.apply();
-                                    timer.cancel();
-                                    StopSound.start();
-                                    StopSound.setLooping(false);
-                                    if(CountSound.isPlaying()){
-                                    CountSound.stop();
-                                    CountSound.reset();}
-                                    startActivity(new Intent(FinalScreen.this, SecondScreen.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
-                                    finish();
-
-                                }
-                            }
-                        }, 0, period);
-
 
                     }
+
                 }
 
             }, 3000);
-            //code for banner ad
+
+        stopReaction(Crowd2);
+        stopReaction(Crowd3);
+        stopReaction(Crowd4);
+
+
+
+
         AdView mAdView = (AdView) findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
+    }
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+    }
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+//change NOISE level here.
+        final float NOISE = (float) 25.0;
+
+        float x = event.values[0];
+        float y = event.values[1];
+        float z = event.values[2];
+        if (!mInitialized) {
+            mLastX = x;
+            mLastY = y;
+            mLastZ = z;
+            mInitialized = true;
+        } else {
+            float deltaX = Math.abs(mLastX - x);
+            float deltaY = Math.abs(mLastY - y);
+            float deltaZ = Math.abs(mLastZ - z);
+            if (deltaX < NOISE) deltaX = (float) 0.0;
+            if (deltaY < NOISE) deltaY = (float) 0.0;
+            if (deltaZ < NOISE) deltaZ = (float) 0.0;
+            mLastX = x;
+            mLastY = y;
+            mLastZ = z;
+
+            instant_acceleration =Math.sqrt((deltaX*deltaX)+(deltaY*deltaY)+(deltaZ*deltaZ));
+
+            accelerationList.add(instant_acceleration);
+
+            resultantAcceleration = Collections.max(accelerationList);
+            score=calculateScore(resultantAcceleration);
+            //
+            final SharedPreferences.Editor editor= game_data.edit();
+            final TextView ScoreView = (TextView) findViewById(R.id.Current_Score);
+            final Intent SecondScreen= new Intent(FinalScreen.this, SecondScreen.class);
+            SecondScreen.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            //
+            if(score> threshold_score){
+                mSensorManager.unregisterListener(listener);
+                if (anim.isRunning()) {
+                    anim.selectDrawable(6);
+                    anim.stop();
+                }
+                if (TimeSound.isPlaying()) {
+                    TimeSound.stop();
+                    TimeSound.reset();
+                }
+                if (score> high_score){
+
+                    editor.putInt("HIGH_SCORE",score);
+                }
+                editor.putInt("CURRENT_SCORE",score);
+
+                CountSound.start();
+                CountSound.setLooping(false);
+
+                final long period =2;
+                timer=new Timer();
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        //this repeats for every value of period variable in ms i.e changes the speed of progress
+                        if (i<score){
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    ScoreView.setText(Integer.toString(i));
+                                }
+
+                            });
+                            i++;
+
+
+                        }else{
+                            //closing the timer
+                            StopSound.start();
+                            StopSound.setLooping(false);
+                            editor.apply();
+                            timer.cancel();
+
+
+                            if(CountSound.isPlaying()){
+                                CountSound.stop();
+                                CountSound.reset();}
+                                startActivity(SecondScreen);
+
+                            if(score<=200)
+                            {
+                                Crowd1.start();
+
+                            }
+                            else if(score<=400)
+                            {
+                                Crowd2.start();
+                            }
+                            else if(score<=700)
+                            {
+                                Crowd3.start();
+                            }
+                            else
+                            {
+                                Crowd4.start();
+                            }
+
+
+                        }
+                    }
+                }, 0, period);
+            }
+
+        }
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        if(TimeSound.isPlaying()){
+        if(TimeSound.isPlaying())
+        {
             TimeSound.stop();
-            TimeSound.reset();
-            }
+
+        }
+        TimeSound.reset();
         if(anim.isRunning()){
             anim.stop();
         }
-        if(CountSound.isPlaying()){
+        if(CountSound.isPlaying())
+        {
             CountSound.stop();
-            CountSound.reset();
+
         }
-        if(StopSound.isPlaying()){
+        CountSound.reset();
+        if(StopSound.isPlaying())
+        {
             StopSound.stop();
-            StopSound.reset();
         }
+        StopSound.reset();
         TimeSoundHandler.removeCallbacks(endSound);
-        startActivity(new Intent(FinalScreen.this, SecondScreen.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+        mSensorManager.unregisterListener(listener);
         finish();
     }
 
+        //If needed to remove max and determine score using average acceleration throughout the period
 
+//    private double calculateAverage(List<Double> samples) {
+//        Double sum = 0.0;
+//        if(!samples.isEmpty()) {
+//            for (Double mark : samples) {
+//                sum += mark;
+//            }
+//            return sum.doubleValue() / samples.size();
+//        }
+//        return sum;
+//    }
+    private int calculateScore(double real_value){
+       score=(int)Math.round((real_value/100)*1000);
+        return score;
     }
+
+    public  void stopReaction(final MediaPlayer soundobj){
+        int mills;
+        if(soundobj==Crowd1){mills=3000;}
+
+        else if (soundobj==Crowd2){mills=4000;}
+        else if (soundobj==Crowd3){mills=5000;}
+        else {mills =6000;}
+
+        new Handler().postDelayed(new Runnable() {
+
+            public void run() {
+
+                if(soundobj.isPlaying()){
+                    soundobj.stop();
+                }
+                soundobj.reset();
+            }
+        }, mills);
+    }
+}

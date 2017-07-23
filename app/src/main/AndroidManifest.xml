@@ -13,7 +13,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:screenOrientation="sensorPortrait">
+        android:screenOrientation="portrait">
         <activity
             android:name=".Splash"
             android:theme="@style/SplashTheme">
@@ -23,7 +23,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".MainActivity"
-            android:screenOrientation="sensorPortrait"/>
+            android:screenOrientation="portrait" >
+        </activity>
         <!-- This meta-data tag is required to use Google Play Services. -->
         <meta-data
             android:name="com.google.android.gms.version"
@@ -39,12 +40,12 @@
         <activity
             android:name=".SecondScreen"
             android:theme="@style/SecondTheme"
-            android:screenOrientation="sensorPortrait"/>
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".FinalScreen"
             android:label="@string/title_activity_game__screen"
             android:theme="@style/SecondTheme"
-            android:screenOrientation="sensorPortrait"/>
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

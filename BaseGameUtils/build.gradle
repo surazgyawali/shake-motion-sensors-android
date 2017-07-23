@@ -45,7 +45,7 @@ android {
         ext.android_min_sdk_version = 16
     }
 
-    compileSdkVersion android_compile_version
+    compileSdkVersion 26
     buildToolsVersion '26.0.0'
 
     defaultConfig {

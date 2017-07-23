@@ -1,16 +1,12 @@
 <resources>
     <string name="app_name">Measure Velocity</string>
-    <string name="title_activity_main2">Main2Activity</string>
 
-    <string name="adUnitId1">ca-app-pub-3940256099942544/6300978111</string>
-    <string name="adUnitId2">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="adUnitId1">ca-app-pub-2532745332818589/7684184615</string>
+    <string name="adUnitId2">ca-app-pub-2532745332818589/7684184615</string>
 
 
-    <!-- -
-        This is an ad unit ID for an interstitial test ad. Replace with your own interstitial ad unit id.
-        For more information, see https://support.google.com/admob/answer/3052638
-    <!- -->
-    <string name="interstitial_ad_unit_id">ca-app-pub-3940256099942544/1033173712</string>
+
+    <string name="interstitial_ad_unit_id">ca-app-pub-2532745332818589/1637651013</string>
     <string name="title_activity_game__screen">Game_Screen</string>
 
 </resources>

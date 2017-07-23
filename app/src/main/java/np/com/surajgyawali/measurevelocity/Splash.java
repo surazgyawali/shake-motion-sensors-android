@@ -1,6 +1,7 @@
 package np.com.surajgyawali.measurevelocity;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Window;
@@ -22,7 +23,6 @@ public class Splash extends AppCompatActivity{
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         super.onCreate(savedInstanceState);
-        // for full screen immersive mode
 
 
         //now show layout
@@ -30,7 +30,10 @@ public class Splash extends AppCompatActivity{
         //code for progressbar
         progressBar=(ProgressBar)findViewById(R.id.progressBar);
         progressBar.setProgress(0);
+        Typeface typeface = Typeface.createFromAsset(getAssets(),"fonts/digital-7.ttf");
+
         textView=(TextView)findViewById(R.id.textView);
+        textView.setTypeface(typeface);
         textView.setText("");
 
         final long period =15;

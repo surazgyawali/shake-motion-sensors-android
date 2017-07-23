@@ -13,20 +13,21 @@
         android:src="@drawable/logo"/>
 
     <ProgressBar
-        style="?android:attr/progressBarStyleHorizontal"
+        style="@android:style/Widget.Holo.Light.ProgressBar.Horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="10dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="50dp"
         android:id="@+id/progressBar"
         android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"/>
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:progressDrawable="@drawable/progressbarrcolor"/>
 
     <TextView
         android:textSize="40sp"
         android:textColor="@android:color/white"
-        android:text="TextView"
+        android:text=""
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/progressBar"

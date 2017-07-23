@@ -14,19 +14,7 @@
         android:src="@drawable/graphic"
         android:scaleType="fitXY"
         />
-    <!--<ImageView-->
-        <!--android:id="@+id/Score_Background2"-->
-        <!--android:layout_width="240dp"-->
-        <!--android:layout_height="240dp"-->
-        <!--android:paddingTop="60dp"-->
-        <!--android:paddingBottom="20dp"-->
-        <!--android:paddingLeft="24dp"-->
-        <!--android:paddingRight="24dp"-->
-        <!--android:layout_centerHorizontal="true"-->
-        <!--android:layout_alignParentTop="true"-->
-        <!--android:src="@drawable/graphic"-->
-        <!--android:scaleType="fitXY"-->
-        <!--/>-->
+
     <TextView
         android:id="@+id/Current_Score"
         android:layout_width="wrap_content"
