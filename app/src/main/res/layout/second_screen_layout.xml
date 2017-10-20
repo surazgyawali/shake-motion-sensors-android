@@ -1,102 +1,123 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:id="@+id/second"
+    android:weightSum="11">
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_marginRight="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="4dp"
+            android:layout_height="0dp"
+            android:layout_weight="6"
+            android:background="@drawable/rounded_shape">
+            <TextView
+                android:id="@+id/High_Score"
+                android:layout_marginTop="32dp"
+                android:layout_width="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="8dp"
+                android:layout_height="wrap_content"
+                android:textSize="56sp"
+                android:textColor="@color/secondary_text"
+                android:text="@string/dummy_score"/>
+            <TextView
+                android:id="@+id/Current_Score"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="32dp"
+                android:text="@string/dummy_score"
+                android:textSize="80sp"
+                android:textColor="@color/primary_text"/>
+    </FrameLayout>
 
-    <ImageView
-        android:id="@+id/Score_Background"
-        android:layout_width="fill_parent"
-        android:layout_height="264dp"
-        android:paddingTop="16dp"
-        android:paddingLeft="32dp"
-        android:paddingRight="32dp"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentTop="true"
-        android:src="@drawable/graphic"
-        android:scaleType="fitXY"
-        />
 
-    <TextView
-        android:id="@+id/Current_Score"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="80dp"
-        android:layout_marginBottom="16dp"
-        android:textSize="80sp"
-        android:textColor="@android:color/white"/>
-    <TextView
-        android:id="@+id/High_Score"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/Current_Score"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="48dp"
-        android:textSize="50sp"
-        android:textColor="@android:color/white" />
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="108dp"
-        android:orientation="horizontal"
-        android:paddingRight="104dp"
-        android:paddingLeft="104dp"
-        android:layout_marginTop="80dp"
-        android:layout_below="@+id/Score_Background"
-        >
-        <ImageButton
-            android:id="@+id/playButton"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_margin="8dp"
-            android:layout_height="match_parent"
-            android:background="@drawable/play"
-          />
-    </LinearLayout>
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="2"
+                android:orientation="horizontal">
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"/>
+                <ImageButton
+                    android:id="@+id/playButton"
+                    android:layout_width="0dp"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1.5"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/playbutton"
+                    android:contentDescription="@string/Play" />
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"/>
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_weight=".55"
+            android:layout_height="0dp"/>
+
 
   <LinearLayout
       android:id="@+id/linear_layout1"
       android:layout_width="match_parent"
-      android:layout_height="56dp"
-      android:layout_above="@+id/adView"
-      android:orientation="horizontal"
-      android:layout_marginTop="32dp"
-      android:layout_marginBottom="16dp">
+      android:layout_height="0dp"
+      android:layout_weight="1.2"
+      android:orientation="horizontal">
+      <LinearLayout
+          android:layout_width="0dp"
+          android:layout_weight=".2"
+          android:layout_height="match_parent"/>
       <ImageButton
           android:id="@+id/leaderboard"
           android:layout_width="0dp"
+          android:layout_weight="1"
           android:layout_height="match_parent"
-          android:background="@drawable/leaderboard"
-          android:layout_marginStart="24dp"
-          android:layout_marginLeft="24dp"
-          android:layout_weight="1"/>
+          android:background="@drawable/leaderboardbutton"
+          android:contentDescription="@string/show_leader_board" />
+      <LinearLayout
+          android:layout_width="0dp"
+          android:layout_weight=".3"
+          android:layout_height="match_parent"/>
       <ImageButton
           android:id="@+id/share"
           android:layout_width="0dp"
           android:layout_height="match_parent"
           android:layout_weight="1"
-          android:background="@drawable/share"
-          android:layout_marginLeft="24dp"
-          android:layout_marginStart="24dp"
+          android:background="@drawable/sharebutton"
+          android:contentDescription="@string/share"
           />
+      <LinearLayout
+          android:layout_width="0dp"
+          android:layout_weight=".3"
+          android:layout_height="match_parent"/>
       <ImageButton
           android:id="@+id/rate"
           android:layout_width="0dp"
           android:layout_height="match_parent"
-          android:background="@drawable/rate"
-          android:layout_marginLeft="24dp"
-          android:layout_marginRight="24dp"
-          android:layout_weight="1"/>
-
-
+          android:background="@drawable/ratebutton"
+          android:layout_weight="1"
+          android:contentDescription="@string/rate"/>
+      <LinearLayout
+          android:layout_width="0dp"
+          android:layout_weight=".2"
+          android:layout_height="match_parent"/>
   </LinearLayout>
-    <com.google.android.gms.ads.AdView
-        xmlns:ads="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/adView"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_weight=".25"
+        android:layout_height="0dp"/>
+    <LinearLayout
+        android:id="@+id/layad"
+        android:gravity="bottom"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
-        ads:adSize="SMART_BANNER"
-        ads:adUnitId="@string/adUnitId1">
-    </com.google.android.gms.ads.AdView>
-
-</RelativeLayout>
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical" >
+    </LinearLayout>
+</LinearLayout>

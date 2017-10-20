@@ -1,64 +1,75 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <ImageView
-        android:id="@+id/Score_Background"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:id="@+id/second"
+    android:weightSum="11">
+    <FrameLayout
         android:layout_width="fill_parent"
-        android:layout_height="264dp"
-        android:paddingTop="16dp"
-        android:paddingLeft="32dp"
-        android:paddingRight="32dp"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentTop="true"
-        android:src="@drawable/graphic"
-        android:scaleType="fitXY"
-        />
-
-    <TextView
-        android:id="@+id/Current_Score"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="80dp"
-        android:layout_marginBottom="16dp"
-        android:textSize="80sp"
-        android:textColor="@android:color/white"/>
-    <TextView
-        android:id="@+id/High_Score"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/Current_Score"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="48dp"
-        android:textSize="50sp"
-        android:textColor="@android:color/white" />
+        android:layout_marginRight="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="4dp"
+        android:layout_height="0dp"
+        android:layout_weight="6"
+        android:background="@drawable/rounded_shape">
+        <TextView
+            android:id="@+id/Current_Score"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="32dp"
+            android:text="@string/dummy_score"
+            android:textSize="72sp"
+            android:textColor="@color/primary_text"/>
+        <TextView
+            android:id="@+id/High_Score"
+            android:layout_marginTop="32dp"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="8dp"
+            android:layout_height="wrap_content"
+            android:textSize="48sp"
+            android:textColor="@color/secondary_text"
+            android:text="@string/dummy_score"/>
+    </FrameLayout>
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="104dp"
+        android:layout_width="match_parent"
+        android:layout_weight=".75"
+        android:layout_height="0dp"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
         android:orientation="horizontal"
-        android:paddingRight="70dp"
-        android:paddingLeft="70dp"
-        android:layout_marginTop="120dp"
-        android:layout_below="@+id/Score_Background"
         >
-    <ImageView
-        android:id="@+id/count_animation"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-       />
-</LinearLayout>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"/>
+        <ImageView
+            android:id="@+id/count_animation"
+            android:layout_width="0dp"
+            android:layout_weight="3"
+            android:layout_height="match_parent"
+            android:contentDescription="@null" />
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"/>
 
-    <com.google.android.gms.ads.AdView
-        xmlns:ads="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/adView"
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_weight="1.25"
+        android:layout_height="0dp"/>
+
+    <LinearLayout
+        android:id="@+id/layad"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
-        ads:adSize="SMART_BANNER"
-        ads:adUnitId="@string/adUnitId2">
-    </com.google.android.gms.ads.AdView>
+        android:layout_height="0dp"
+        android:gravity="bottom"
+        android:layout_weight="1"
+        android:orientation="vertical" >
+    </LinearLayout>
 
-</RelativeLayout>
+</LinearLayout>

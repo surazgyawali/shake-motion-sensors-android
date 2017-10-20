@@ -148,7 +148,7 @@ public class GameHelper implements GoogleApiClient.ConnectionCallbacks,
     SignInFailureReason mSignInFailureReason = null;
 
     // Should we show error dialog boxes?
-    boolean mShowErrorDialogs = true;
+    boolean mShowErrorDialogs = false;
 
     // Print debug logs?
     boolean mDebugLog = false;
@@ -179,7 +179,7 @@ public class GameHelper implements GoogleApiClient.ConnectionCallbacks,
     // Should we start the flow to sign the user in automatically on startup? If
     // so, up to
     // how many times in the life of the application?
-    static final int DEFAULT_MAX_SIGN_IN_ATTEMPTS = 3;
+    static final int DEFAULT_MAX_SIGN_IN_ATTEMPTS = 1;
     int mMaxAutoSignInAttempts = DEFAULT_MAX_SIGN_IN_ATTEMPTS;
 
     /**

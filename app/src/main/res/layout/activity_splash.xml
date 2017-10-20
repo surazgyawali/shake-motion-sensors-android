@@ -4,13 +4,13 @@
     android:id="@+id/activity_splash"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="np.com.surajgyawali.measurevelocity.Splash">
+    tools:context="ifunco.android.velocity.Splash">
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="fitXY"
-        android:src="@drawable/logo"/>
+        android:contentDescription="@null" />
 
     <ProgressBar
         style="@android:style/Widget.Holo.Light.ProgressBar.Horizontal"

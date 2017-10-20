@@ -19,7 +19,7 @@
                 <corners android:radius="2dip" />
                 <gradient
                     android:startColor="#FF9900"
-                    android:centerColor="#FFCC00"
+                    android:centerColor="#FDC500"
                     android:centerY="1.0"
                     android:endColor="#FFFF66"
                     android:angle="270"

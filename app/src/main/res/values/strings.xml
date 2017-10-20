@@ -1,12 +1,11 @@
 <resources>
     <string name="app_name">Measure Velocity</string>
-
-    <string name="adUnitId1">ca-app-pub-2532745332818589/7684184615</string>
-    <string name="adUnitId2">ca-app-pub-2532745332818589/7684184615</string>
-
-
-
-    <string name="interstitial_ad_unit_id">ca-app-pub-2532745332818589/1637651013</string>
-    <string name="title_activity_game__screen">Game_Screen</string>
+    <string name="title_activity_game__screen">VelocityTest</string>
+    <string name="dummy_score">580</string>
+    <string name="rate">Opens google play to rate the app</string>
+    <string name="share">share the application.</string>
+    <string name="show_leader_board">Show Leader board.</string>
+    <string name="Play">Start to play the game.</string>
+    <string name="login_success">Successfully logged in Google Play!!!</string>
 
 </resources>
