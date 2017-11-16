@@ -16,7 +16,8 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.ImageButton;
+import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,27 +29,24 @@ import com.google.android.gms.games.Games;
 import com.google.example.games.basegameutils.GameHelper;
 
 import static ifunco.android.velocity.CommonMethod.Sound;
+import static ifunco.android.velocity.CommonMethod.mute;
 
 public class SecondScreen extends AppCompatActivity{
 
     private static final int TIME_DELAY = 2000;
     private static long back_pressed;
 
-    ImageButton playButton;
     private InterstitialAd mInterstitialAd;
-    ImageButton shareButton;
-    ImageButton leaderBoardButton;
-    ImageButton rateButton;
     static int COUNT = 0;
     int score;
     int high_score;
+    boolean mute;
     SharedPreferences game_data;
     private MediaPlayer ButtonSound=new MediaPlayer();
     //leader board
     private GameHelper gameHelper;
     private final static int requestCode = 1;
     Intent FinalScreen=new Intent();
-    private Animation buttonAnimation=null;
 
     LinearLayout layAd;
     CommonMethod commonMethod;
@@ -62,7 +60,6 @@ public class SecondScreen extends AppCompatActivity{
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.second_screen_layout);
-
         layAd = (LinearLayout) findViewById(R.id.layad);
         commonMethod = (CommonMethod) getApplication();
 
@@ -89,12 +86,18 @@ public class SecondScreen extends AppCompatActivity{
 
 
 
-        TextView ScoreView = (TextView) findViewById(R.id.Current_Score);
-        playButton = (ImageButton) findViewById(R.id.playButton);
-        TextView HighScoreView = (TextView) findViewById(R.id.High_Score);
-        rateButton = (ImageButton) findViewById(R.id.rate);
-        shareButton = (ImageButton) findViewById(R.id.share);
-        leaderBoardButton = (ImageButton) findViewById(R.id.leaderboard);
+        final TextView ScoreView = (TextView) findViewById(R.id.Current_Score);
+        final Button playButton = (Button) findViewById(R.id.playButton);
+        final TextView HighScoreView = (TextView) findViewById(R.id.High_Score);
+         final Button rateButton = (Button) findViewById(R.id.rate);
+        final Button shareButton = (Button) findViewById(R.id.share);
+       final Button leaderBoardButton = (Button) findViewById(R.id.leaderboard);
+        final CheckBox muteCheckBox = (CheckBox) findViewById(R.id.Mute);
+        game_data = getSharedPreferences("GAME_DATA", Context.MODE_PRIVATE);
+        final SharedPreferences.Editor editor= game_data.edit();
+
+
+
 
         if(ButtonSound!=null)
         {
@@ -108,7 +111,9 @@ public class SecondScreen extends AppCompatActivity{
         ButtonSound = MediaPlayer.create(this,R.raw.button);
         ButtonSound.setLooping(false);
 
-        Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/digital-7.ttf");
+
+
+        Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/alphamencondital.ttf");
         ScoreView.setTypeface(typeface);
         HighScoreView.setTypeface(typeface);
 
@@ -130,23 +135,41 @@ public class SecondScreen extends AppCompatActivity{
         }
 
         FinalScreen = new Intent(SecondScreen.this, FinalScreen.class);
-        buttonAnimation = AnimationUtils.loadAnimation(SecondScreen.this, R.anim.button_anim);
-        Animation scoreAnimation = AnimationUtils.loadAnimation(SecondScreen.this, R.anim.score_anim);
+        Animation scoreAnimation = AnimationUtils.loadAnimation(SecondScreen.this, R.anim.shake);
 
         mInterstitialAd = new InterstitialAd(getApplicationContext());
         mInterstitialAd.setAdUnitId(getString(R.string.interstitial_ad_unit_id));
 
         mInterstitialAd.loadAd(new AdRequest.Builder().build());
 
-        game_data = getSharedPreferences("GAME_DATA", Context.MODE_PRIVATE);
-
 
 
         high_score = game_data.getInt("HIGH_SCORE", 0);
         score = game_data.getInt("CURRENT_SCORE", 0);
+        mute=game_data.getBoolean("MUTE",false);
+        muteCheckBox.setChecked(mute);
+
 
         ScoreView.setText(Integer.toString(score));
         HighScoreView.setText(Integer.toString(high_score));
+
+
+        muteCheckBox.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                mute = muteCheckBox.isChecked();
+                editor.putBoolean("MUTE",mute);
+                Toast.makeText(SecondScreen.this, "MUTE-STATE:"+mute, Toast.LENGTH_SHORT).show();
+                editor.apply();
+                editor.commit();
+                mute(mute,ButtonSound);
+            }
+        });
+
+
+
 
         if(savedInstanceState == null)
         {
@@ -186,7 +209,6 @@ public class SecondScreen extends AppCompatActivity{
                     Sound.stop();
                 }
                     ButtonSound.start();
-                playButton.startAnimation(buttonAnimation);
 
                 if(COUNT>=5) {
                     if(!mInterstitialAd.isLoaded()){
@@ -209,7 +231,6 @@ public class SecondScreen extends AppCompatActivity{
             @Override
             public void onClick(View arg0) {
                 ButtonSound.start();
-                shareButton.startAnimation(buttonAnimation);
 
                 shareGame();
             }
@@ -219,7 +240,6 @@ public class SecondScreen extends AppCompatActivity{
             @Override
             public void onClick(View view) {
                 ButtonSound.start();
-                leaderBoardButton.startAnimation(buttonAnimation);
                 showScore();
 
             }
@@ -229,7 +249,6 @@ public class SecondScreen extends AppCompatActivity{
             @Override
             public void onClick(View view) {
                 ButtonSound.start();
-                rateButton.startAnimation(buttonAnimation);
 
 
                 try {
@@ -243,6 +262,8 @@ public class SecondScreen extends AppCompatActivity{
 
 
         commonMethod.loadAd(layAd);
+        mute(mute,ButtonSound);
+
 
     }
 

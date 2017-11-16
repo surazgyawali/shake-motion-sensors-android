@@ -18,7 +18,8 @@
     <item>
         <bitmap
             android:tint="@color/icons"
-            android:gravity="clip_vertical"
-            android:src="@drawable/leaderboard"/>
+            android:filter="true"
+            android:gravity="center"
+            android:src="@drawable/ic_leaderboard"/>
     </item>
 </layer-list>

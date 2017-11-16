@@ -12,25 +12,51 @@
             android:layout_height="0dp"
             android:layout_weight="6"
             android:background="@drawable/rounded_shape">
+            <Button
+                android:id="@+id/Help"
+                android:layout_width="40dp"
+                android:layout_margin="20dp"
+                android:layout_height="40dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_gravity="end"
+                android:background="@drawable/ic_help_outline__24dp"/>
+            <CheckBox
+                android:id="@+id/Mute"
+                android:layout_width="40dp"
+                android:layout_margin="20dp"
+                android:button="@null"
+                android:checked="false"
+                android:layout_height="40dp"
+                android:layout_gravity="start"
+                android:background="@drawable/mute_check"/>
             <TextView
                 android:id="@+id/High_Score"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="40dp"
                 android:layout_width="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginBottom="8dp"
                 android:layout_height="wrap_content"
-                android:textSize="56sp"
-                android:textColor="@color/secondary_text"
+                android:shadowColor="@color/icons"
+                android:shadowRadius="4"
+                android:shadowDx="1"
+                android:shadowDy="1"
+                android:textSize="64sp"
+                android:textColor="@color/primary_light"
                 android:text="@string/dummy_score"/>
             <TextView
                 android:id="@+id/Current_Score"
                 android:layout_gravity="center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="32dp"
-                android:text="@string/dummy_score"
-                android:textSize="80sp"
-                android:textColor="@color/primary_text"/>
+                android:layout_marginBottom="40dp"
+               android:text="@string/dummy_score"
+                android:textSize="88sp"
+                android:shadowColor="@color/icons"
+                android:shadowRadius="4"
+                android:shadowDx="1"
+                android:shadowDy="1"
+                android:textColor="@color/accent"/>
     </FrameLayout>
 
 
@@ -43,13 +69,16 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="match_parent"/>
-                <ImageButton
+                <Button
                     android:id="@+id/playButton"
                     android:layout_width="0dp"
                     android:layout_margin="5dp"
                     android:layout_weight="1.5"
                     android:layout_height="match_parent"
                     android:background="@drawable/playbutton"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
                     android:contentDescription="@string/Play" />
                 <LinearLayout
                     android:layout_width="0dp"
@@ -59,7 +88,7 @@
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_weight=".55"
+            android:layout_weight="1"
             android:layout_height="0dp"/>
 
 
@@ -67,45 +96,52 @@
       android:id="@+id/linear_layout1"
       android:layout_width="match_parent"
       android:layout_height="0dp"
-      android:layout_weight="1.2"
+      android:layout_weight="0.85"
       android:orientation="horizontal">
       <LinearLayout
           android:layout_width="0dp"
-          android:layout_weight=".2"
+          android:layout_weight=".375"
           android:layout_height="match_parent"/>
-      <ImageButton
+      <Button
           android:id="@+id/leaderboard"
           android:layout_width="0dp"
-          android:layout_weight="1"
+          android:layout_weight=".7"
           android:layout_height="match_parent"
+          android:foreground="?attr/selectableItemBackgroundBorderless"
           android:background="@drawable/leaderboardbutton"
+          android:clickable="true"
+          android:focusable="true"
           android:contentDescription="@string/show_leader_board" />
       <LinearLayout
           android:layout_width="0dp"
-          android:layout_weight=".3"
+          android:layout_weight=".475"
           android:layout_height="match_parent"/>
-      <ImageButton
+      <Button
           android:id="@+id/share"
           android:layout_width="0dp"
           android:layout_height="match_parent"
-          android:layout_weight="1"
+          android:layout_weight=".7"
+          android:clickable="true"
+          android:focusable="true"
           android:background="@drawable/sharebutton"
           android:contentDescription="@string/share"
           />
       <LinearLayout
           android:layout_width="0dp"
-          android:layout_weight=".3"
+          android:layout_weight=".475"
           android:layout_height="match_parent"/>
-      <ImageButton
+      <Button
           android:id="@+id/rate"
           android:layout_width="0dp"
           android:layout_height="match_parent"
           android:background="@drawable/ratebutton"
-          android:layout_weight="1"
+          android:clickable="true"
+          android:focusable="true"
+          android:layout_weight=".7"
           android:contentDescription="@string/rate"/>
       <LinearLayout
           android:layout_width="0dp"
-          android:layout_weight=".2"
+          android:layout_weight=".375"
           android:layout_height="match_parent"/>
   </LinearLayout>
     <LinearLayout

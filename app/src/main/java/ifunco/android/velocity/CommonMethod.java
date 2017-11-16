@@ -61,5 +61,17 @@ CommonMethod extends Application {
             Sound.setLooping(false);
         }
 
+    static void mute(boolean mute,MediaPlayer sound){
+
+        if(mute){
+            CommonMethod.Sound.setVolume(0,0);
+            sound.setVolume(0,0);
+        }
+        else {
+            CommonMethod.Sound.setVolume(1,1);
+            sound.setVolume(1,1);
+        }
+    }
+
 
 }

@@ -14,9 +14,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Timer;
@@ -35,12 +39,11 @@ public class FinalScreen extends AppCompatActivity implements SensorEventListene
 
     Runnable endSound = null;
     private MediaPlayer StopSound=new MediaPlayer();
-
-    AnimationDrawable anim=new AnimationDrawable();
     SharedPreferences game_data;
 
     int score=0;
     int high_score =0;
+    boolean mute;
 
     private float mLastX, mLastY, mLastZ;
     private boolean mInitialized;
@@ -77,13 +80,14 @@ public class FinalScreen extends AppCompatActivity implements SensorEventListene
 
 
 
-        Typeface typeface = Typeface.createFromAsset(getAssets(),"fonts/digital-7.ttf");
+        Typeface typeface = Typeface.createFromAsset(getAssets(),"fonts/alphamencondital.ttf");
 
         SecondScreen= new Intent(FinalScreen.this, SecondScreen.class);
 
         final TextView ScoreView = (TextView) findViewById(R.id.Current_Score);
         final TextView HighScoreView = (TextView) findViewById(R.id.High_Score);
-        ImageView imageView =(ImageView) findViewById(R.id.count_animation);
+        final TextView ShakeText=(TextView)findViewById(R.id.shake_animation);
+       // ImageView imageView =(ImageView) findViewById(R.id.count_animation);
 
 
 
@@ -100,8 +104,12 @@ public class FinalScreen extends AppCompatActivity implements SensorEventListene
         StopSound = MediaPlayer.create(this,R.raw.stop);
 
 
-        imageView.setBackgroundResource(R.drawable.count_movi);
-        anim = (AnimationDrawable) imageView.getBackground();
+//        imageView.setBackgroundResource(R.drawable.count_movi);
+//        anim = (AnimationDrawable) imageView.getBackground();
+        Animation shakeAnimation = AnimationUtils.loadAnimation(FinalScreen.this, R.anim.shake);
+        ShakeText.startAnimation(shakeAnimation);
+
+
         ScoreView.setTypeface(typeface);
         HighScoreView.setTypeface(typeface);
 
@@ -109,15 +117,20 @@ public class FinalScreen extends AppCompatActivity implements SensorEventListene
 
         high_score = game_data.getInt("HIGH_SCORE",0);
         score= game_data.getInt("CURRENT_SCORE",0);
+        mute=game_data.getBoolean("MUTE",false);
+        Toast.makeText(this, "MUTE:"+mute, Toast.LENGTH_SHORT).show();
+
 
         ScoreView.setText(Integer.toString(score));
 
         HighScoreView.setText(Integer.toString(high_score));
 
-        anim.start();
-        anim.setOneShot(true);
+//        anim.start();
+//        anim.setOneShot(true);
+
 
         soundPlayer(this,R.raw.time);
+
 
 
         TimeSoundHandler.postDelayed(endSound = new Runnable() {
@@ -125,10 +138,11 @@ public class FinalScreen extends AppCompatActivity implements SensorEventListene
                 public void run() {
                     mSensorManager.unregisterListener(listener);
                     if(score< threshold_score) {
-                        if (anim.isRunning()) {
-                            anim.stop();
-                        }
+//                        if (anim.isRunning()) {
+//                            anim.stop();
+//                        }
                         Sound.stop();
+
                         soundPlayer(FinalScreen.this,R.raw.crowd1);
                         TimeSoundHandler.removeCallbacks(endSound);
                         TimeSoundHandler.removeCallbacksAndMessages(null);
@@ -139,6 +153,7 @@ public class FinalScreen extends AppCompatActivity implements SensorEventListene
                 }
 
             }, 3000);
+        CommonMethod.mute(mute,StopSound);
 
 
     }
@@ -184,10 +199,10 @@ public class FinalScreen extends AppCompatActivity implements SensorEventListene
             if(score> threshold_score){
                 mSensorManager.unregisterListener(listener);
 
-                if (anim.isRunning()) {
-                    anim.selectDrawable(6);
-                    anim.stop();
-                }
+//                if (anim.isRunning()) {
+//                    anim.selectDrawable(6);
+//                    anim.stop();
+//                }
                 Sound.stop();
 
                 if (score> high_score){
@@ -195,7 +210,8 @@ public class FinalScreen extends AppCompatActivity implements SensorEventListene
                     editor.putInt("HIGH_SCORE",score);
                 }
                 editor.putInt("CURRENT_SCORE",score);
-                soundPlayer(this,R.raw.count);
+                if(!mute){
+                soundPlayer(this,R.raw.count);}
                 Sound.setLooping(true);
 
                 final long period =2;
@@ -226,23 +242,18 @@ public class FinalScreen extends AppCompatActivity implements SensorEventListene
 
                             editor.apply();
                             timer.cancel();
-                            if(score<=200)
-                            {
-                                soundPlayer(FinalScreen.this,R.raw.crowd1);
+                                if (score <= 200) {
+                                    soundPlayer(FinalScreen.this, R.raw.crowd1);
 
-                            }
-                            else if(score<=400)
-                            {
-                                soundPlayer(FinalScreen.this,R.raw.crowd2);
-                            }
-                            else if(score<=700)
-                            {
-                                soundPlayer(FinalScreen.this,R.raw.crowd3);
-                            }
-                            else
-                            {
-                                soundPlayer(FinalScreen.this,R.raw.crowd4);
-                            }
+                                } else if (score <= 400) {
+                                    soundPlayer(FinalScreen.this, R.raw.crowd2);
+                                } else if (score <= 700) {
+                                    soundPlayer(FinalScreen.this, R.raw.crowd3);
+                                } else {
+                                    soundPlayer(FinalScreen.this, R.raw.crowd4);
+                                }
+                                CommonMethod.mute(mute,StopSound);
+
                             TimeSoundHandler.removeCallbacks(endSound);
                             TimeSoundHandler.removeCallbacksAndMessages(null);
 
@@ -255,13 +266,14 @@ public class FinalScreen extends AppCompatActivity implements SensorEventListene
             }
 
         }
+
     }
 
     @Override
     public void onBackPressed() {
-        if(anim.isRunning()){
-            anim.stop();
-        }
+//        if(anim.isRunning()){
+//            anim.stop();
+//        }
         Sound.stop();
         TimeSoundHandler.removeCallbacks(endSound);
         TimeSoundHandler.removeCallbacksAndMessages(null);
@@ -274,5 +286,4 @@ public class FinalScreen extends AppCompatActivity implements SensorEventListene
        score=(int)Math.round((real_value/100)*1000);
         return score;
     }
-
 }

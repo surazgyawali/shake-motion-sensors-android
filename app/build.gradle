@@ -2,9 +2,9 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 26
-    buildToolsVersion "26.0.0"
+    buildToolsVersion '26.0.2'
     defaultConfig {
-        applicationId "ifunco.android.velocity"
+        applicationId "np.com.surajgyawali"
         minSdkVersion 16
         targetSdkVersion 26
         versionCode 3

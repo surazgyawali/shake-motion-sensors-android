@@ -17,8 +17,7 @@
     </item>
     <item>
         <bitmap
-            android:tint="@color/icons"
-            android:gravity="clip_vertical"
-            android:src="@drawable/share"/>
+            android:gravity="center"
+            android:src="@drawable/ic_share"/>
     </item>
 </layer-list>

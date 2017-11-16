@@ -18,7 +18,7 @@
     <item>
         <bitmap
             android:tint="@color/icons"
-            android:gravity="clip_vertical"
-            android:src="@drawable/rate"/>
+            android:gravity="center_vertical|center_horizontal"
+            android:src="@drawable/ic_rate"/>
     </item>
 </layer-list>
