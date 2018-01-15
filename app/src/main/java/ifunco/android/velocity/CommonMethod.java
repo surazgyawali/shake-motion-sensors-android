@@ -2,6 +2,9 @@ package ifunco.android.velocity;
 import android.app.Application;
 import android.content.Context;
 import android.media.MediaPlayer;
+import android.os.Build;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
@@ -72,6 +75,5 @@ CommonMethod extends Application {
             sound.setVolume(1,1);
         }
     }
-
 
 }

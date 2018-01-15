@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/buttonbackground"
+    android:orientation="vertical"
+    android:padding="10dp">
+    <EditText
+        android:id="@+id/shake_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:ems="10"
+        android:hint="Shake Time:"
+        android:inputType="number" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="About"
+        android:textAlignment="center"
+        android:textSize="35sp" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="vertical"
+        android:scrollbarSize="20dp"
+        android:scrollbarStyle="insideOverlay"
+        android:textSize="22sp"
+        android:layout_gravity="start"
+        android:textAlignment="center"
+        android:text="@string/Help"/>
+    <Button
+        android:id="@+id/btnLogin"
+        android:layout_gravity="center"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="20dp"
+        android:text="Ok"
+        android:background="@drawable/buttonbackground"
+        android:textColor="@android:color/white" />
+</LinearLayout>

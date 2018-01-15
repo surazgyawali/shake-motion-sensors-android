@@ -10,6 +10,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.media.MediaPlayer;
 import android.os.Handler;
+import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Window;
@@ -23,6 +24,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -35,7 +37,7 @@ public class FinalScreen extends AppCompatActivity implements SensorEventListene
     private Timer timer;
     private int i=0;
 
-    final private int threshold_score =150;
+    final private int threshold_score =3;
 
     Runnable endSound = null;
     private MediaPlayer StopSound=new MediaPlayer();
@@ -67,7 +69,7 @@ public class FinalScreen extends AppCompatActivity implements SensorEventListene
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.final_screen_layout);
 
-        LinearLayout layAd = (LinearLayout) findViewById(R.id.layad);
+        LinearLayout layAd = findViewById(R.id.layad);
 
         commonMethod = (CommonMethod) getApplication();
         commonMethod.loadAd(layAd);
@@ -80,13 +82,13 @@ public class FinalScreen extends AppCompatActivity implements SensorEventListene
 
 
 
-        Typeface typeface = Typeface.createFromAsset(getAssets(),"fonts/alphamencondital.ttf");
+        Typeface typeface = Typeface.createFromAsset(getAssets(),"fonts/HomegirlOpenMinded.ttf");
 
         SecondScreen= new Intent(FinalScreen.this, SecondScreen.class);
 
-        final TextView ScoreView = (TextView) findViewById(R.id.Current_Score);
-        final TextView HighScoreView = (TextView) findViewById(R.id.High_Score);
-        final TextView ShakeText=(TextView)findViewById(R.id.shake_animation);
+        final TextView ScoreView = findViewById(R.id.Current_Score);
+        final TextView HighScoreView = findViewById(R.id.High_Score);
+        final TextView ShakeText= findViewById(R.id.shake_animation);
        // ImageView imageView =(ImageView) findViewById(R.id.count_animation);
 
 
@@ -112,6 +114,7 @@ public class FinalScreen extends AppCompatActivity implements SensorEventListene
 
         ScoreView.setTypeface(typeface);
         HighScoreView.setTypeface(typeface);
+        ShakeText.setTypeface(typeface);
 
         game_data = getSharedPreferences("GAME_DATA", Context.MODE_PRIVATE);
 
@@ -130,6 +133,9 @@ public class FinalScreen extends AppCompatActivity implements SensorEventListene
 
 
         soundPlayer(this,R.raw.time);
+        final SharedPreferences.Editor editor= game_data.edit();
+        final Vibrator endVibration=(Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+
 
 
 
@@ -142,12 +148,78 @@ public class FinalScreen extends AppCompatActivity implements SensorEventListene
 //                            anim.stop();
 //                        }
                         Sound.stop();
-
-                        soundPlayer(FinalScreen.this,R.raw.crowd1);
+                        if(!mute){
+                        soundPlayer(FinalScreen.this,R.raw.crowd1);}
                         TimeSoundHandler.removeCallbacks(endSound);
                         TimeSoundHandler.removeCallbacksAndMessages(null);
                         startActivity(SecondScreen);
+                        endVibration.vibrate(250);
                         finish();
+                    }
+
+                    else{
+                        Sound.stop();
+
+                        if (score> high_score){
+
+                            editor.putInt("HIGH_SCORE",score);
+                        }
+                        editor.putInt("CURRENT_SCORE",score);
+                        if(!mute){
+                            soundPlayer(FinalScreen.this,R.raw.count);}
+                        Sound.setLooping(true);
+
+                        final long period =2;
+                        timer=new Timer();
+                        timer.schedule(new TimerTask() {
+                            @Override
+                            public void run() {
+                                //this repeats for every value of period variable in ms i.e changes the speed of progress
+                                if (i<score){
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            ScoreView.setText(Integer.toString(i));
+                                        }
+
+                                    });
+                                    i++;
+
+
+                                }else{
+                                    //closing the timer
+
+                                    if(Sound.isPlaying()){
+                                        Sound.stop();}
+
+                                    StopSound.start();
+                                    StopSound.setLooping(false);
+
+
+                                    editor.apply();
+                                    timer.cancel();
+                                    if (score <= 15) {
+                                        soundPlayer(FinalScreen.this, R.raw.crowd1);
+
+                                    } else if (score <= 25) {
+                                        soundPlayer(FinalScreen.this, R.raw.crowd2);
+                                    } else if (score <= 35  ) {
+                                        soundPlayer(FinalScreen.this, R.raw.crowd3);
+                                    } else {
+                                        soundPlayer(FinalScreen.this, R.raw.crowd4);
+                                    }
+                                    CommonMethod.mute(mute,StopSound);
+
+                                    TimeSoundHandler.removeCallbacks(endSound);
+                                    TimeSoundHandler.removeCallbacksAndMessages(null);
+
+                                    SecondScreen.putExtra("AnimateScore","myAnim");
+                                    endVibration.vibrate(250);
+                                    startActivity(SecondScreen);
+                                    finish();
+                                }
+                            }
+                        }, 0, period);
                     }
 
                 }
@@ -164,7 +236,7 @@ public class FinalScreen extends AppCompatActivity implements SensorEventListene
     @Override
     public void onSensorChanged(SensorEvent event) {
 //change NOISE level here.
-        final float NOISE = (float) 15.0;
+        final float NOISE = (float) 0.02;
 
         float x = event.values[0];
         float y = event.values[1];
@@ -189,81 +261,28 @@ public class FinalScreen extends AppCompatActivity implements SensorEventListene
 
             accelerationList.add(instant_acceleration);
 
-           resultantAcceleration = Collections.max(accelerationList);
-            score=calculateScore(resultantAcceleration);
+            //to find max from the list of acclerations
+
+//           resultantAcceleration = Collections.max(accelerationList);
+//            score=calculateScore(resultantAcceleration);
+
+            //to find total avg accleration
+            score=(int)calculateSum(accelerationList);
 
             final SharedPreferences.Editor editor= game_data.edit();
-            final TextView ScoreView = (TextView) findViewById(R.id.Current_Score);
-
-            //
-            if(score> threshold_score){
-                mSensorManager.unregisterListener(listener);
-
-//                if (anim.isRunning()) {
-//                    anim.selectDrawable(6);
-//                    anim.stop();
-//                }
-                Sound.stop();
-
-                if (score> high_score){
+            final TextView ScoreView = findViewById(R.id.Current_Score);
+            ScoreView.setText(Integer.toString(score));
+            if (score> high_score){
 
                     editor.putInt("HIGH_SCORE",score);
                 }
                 editor.putInt("CURRENT_SCORE",score);
-                if(!mute){
-                soundPlayer(this,R.raw.count);}
-                Sound.setLooping(true);
-
-                final long period =2;
-                timer=new Timer();
-                timer.schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        //this repeats for every value of period variable in ms i.e changes the speed of progress
-                        if (i<score){
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    ScoreView.setText(Integer.toString(i));
-                                }
-
-                            });
-                            i++;
+                editor.apply();
 
 
-                        }else{
-                            //closing the timer
-                            if(Sound.isPlaying()){
-                            Sound.stop();}
-
-                            StopSound.start();
-                            StopSound.setLooping(false);
 
 
-                            editor.apply();
-                            timer.cancel();
-                                if (score <= 200) {
-                                    soundPlayer(FinalScreen.this, R.raw.crowd1);
-
-                                } else if (score <= 400) {
-                                    soundPlayer(FinalScreen.this, R.raw.crowd2);
-                                } else if (score <= 700) {
-                                    soundPlayer(FinalScreen.this, R.raw.crowd3);
-                                } else {
-                                    soundPlayer(FinalScreen.this, R.raw.crowd4);
-                                }
-                                CommonMethod.mute(mute,StopSound);
-
-                            TimeSoundHandler.removeCallbacks(endSound);
-                            TimeSoundHandler.removeCallbacksAndMessages(null);
-
-                            SecondScreen.putExtra("AnimateScore","myAnim");
-                            startActivity(SecondScreen);
-                            finish();
-                        }
-                    }
-                }, 0, period);
-            }
+            //end of if tag
 
         }
 
@@ -282,8 +301,21 @@ public class FinalScreen extends AppCompatActivity implements SensorEventListene
         finish();
     }
 
-    private int calculateScore(double real_value){
-       score=(int)Math.round((real_value/100)*1000);
-        return score;
-    }
+//    private int calculateScore(double real_value){
+//       score=(int)Math.round((real_value/10000)*100);
+//        return score;
+//    }
+    //If needed to remove max and determine score using average acceleration throughout the period
+
+    private double calculateSum(List<Double> samples) {
+        Double sum = 0.0;
+        if(!samples.isEmpty()) {
+            for (Double mark : samples) {
+                sum += mark;
+            }
+            return (sum) / samples.size();
+
+        }
+        return sum;
+           }
 }

@@ -13,7 +13,7 @@
             android:layout_weight="6"
             android:background="@drawable/rounded_shape">
             <Button
-                android:id="@+id/Help"
+                android:id="@+id/Setting"
                 android:layout_width="40dp"
                 android:layout_margin="20dp"
                 android:layout_height="40dp"
@@ -41,7 +41,7 @@
                 android:shadowRadius="4"
                 android:shadowDx="1"
                 android:shadowDy="1"
-                android:textSize="64sp"
+                android:textSize="72sp"
                 android:textColor="@color/primary_light"
                 android:text="@string/dummy_score"/>
             <TextView
@@ -51,7 +51,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="40dp"
                android:text="@string/dummy_score"
-                android:textSize="88sp"
+                android:textSize="96sp"
                 android:shadowColor="@color/icons"
                 android:shadowRadius="4"
                 android:shadowDx="1"

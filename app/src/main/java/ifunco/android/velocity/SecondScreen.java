@@ -5,10 +5,13 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -18,9 +21,12 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.os.Vibrator;
+
 
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
@@ -39,6 +45,7 @@ public class SecondScreen extends AppCompatActivity{
     private InterstitialAd mInterstitialAd;
     static int COUNT = 0;
     int score;
+    int shakeTime=3;
     int high_score;
     boolean mute;
     SharedPreferences game_data;
@@ -47,6 +54,7 @@ public class SecondScreen extends AppCompatActivity{
     private GameHelper gameHelper;
     private final static int requestCode = 1;
     Intent FinalScreen=new Intent();
+
 
     LinearLayout layAd;
     CommonMethod commonMethod;
@@ -60,7 +68,7 @@ public class SecondScreen extends AppCompatActivity{
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.second_screen_layout);
-        layAd = (LinearLayout) findViewById(R.id.layad);
+        layAd = findViewById(R.id.layad);
         commonMethod = (CommonMethod) getApplication();
 
 
@@ -86,13 +94,14 @@ public class SecondScreen extends AppCompatActivity{
 
 
 
-        final TextView ScoreView = (TextView) findViewById(R.id.Current_Score);
-        final Button playButton = (Button) findViewById(R.id.playButton);
-        final TextView HighScoreView = (TextView) findViewById(R.id.High_Score);
-         final Button rateButton = (Button) findViewById(R.id.rate);
-        final Button shareButton = (Button) findViewById(R.id.share);
-       final Button leaderBoardButton = (Button) findViewById(R.id.leaderboard);
-        final CheckBox muteCheckBox = (CheckBox) findViewById(R.id.Mute);
+        final TextView ScoreView = findViewById(R.id.Current_Score);
+        final Button playButton =  findViewById(R.id.playButton);
+        final TextView HighScoreView = findViewById(R.id.High_Score);
+         final Button rateButton = findViewById(R.id.rate);
+        final Button shareButton = findViewById(R.id.share);
+       final Button leaderBoardButton = findViewById(R.id.leaderboard);
+        final Button settingButton = findViewById(R.id.Setting);
+        final CheckBox muteCheckBox = findViewById(R.id.Mute);
         game_data = getSharedPreferences("GAME_DATA", Context.MODE_PRIVATE);
         final SharedPreferences.Editor editor= game_data.edit();
 
@@ -113,7 +122,7 @@ public class SecondScreen extends AppCompatActivity{
 
 
 
-        Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/alphamencondital.ttf");
+        Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/HomegirlOpenMinded.ttf");
         ScoreView.setTypeface(typeface);
         HighScoreView.setTypeface(typeface);
 
@@ -152,6 +161,23 @@ public class SecondScreen extends AppCompatActivity{
 
         ScoreView.setText(Integer.toString(score));
         HighScoreView.setText(Integer.toString(high_score));
+        //setting dialogue def
+
+        AlertDialog.Builder settingBuilder = new AlertDialog.Builder(SecondScreen.this);
+        View settingView= getLayoutInflater().inflate(R.layout.setting_dialog,null);
+        settingBuilder.setView(settingView);
+        final AlertDialog dialog = settingBuilder.create();
+        final EditText shakeTimeView= settingView.findViewById(R.id.shake_time);
+        shakeTimeView.setHint("Shake Time: "+shakeTime+" Seconds");
+
+        settingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View darg) {
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog.show();
+
+            }
+        });
 
 
         muteCheckBox.setOnClickListener(new View.OnClickListener() {
@@ -219,8 +245,12 @@ public class SecondScreen extends AppCompatActivity{
                         mInterstitialAd.show();
                         }
                 }   else{
+                    //vibrator object for vibration
+                    final Vibrator startVibrate = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 
-                startActivity(FinalScreen);
+                    startVibrate.vibrate(250);//vibrates for 250milisec
+
+                    startActivity(FinalScreen);
                 finish();}
 
             }
@@ -271,8 +301,8 @@ public class SecondScreen extends AppCompatActivity{
     private void shareGame() {
         Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
         sharingIntent.setType("text/plain");
-        String shareBody = "I'm playing this awesome game. You can check out this game by clicking here: " + Uri.parse("https://play.google.com/store/apps/details?id=" + SecondScreen.this.getPackageName());
-        sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Try this awesome game!!");
+        String shareBody = "I'm playing this interesting SHAKE ME game. You too can play this game by clicking here: " + Uri.parse("https://play.google.com/store/apps/details?id=" + SecondScreen.this.getPackageName());
+        sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Try this interesting game!!");
         sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
         startActivity(Intent.createChooser(sharingIntent, "Share via"));
     }
